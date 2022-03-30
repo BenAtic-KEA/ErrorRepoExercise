@@ -1,5 +1,5 @@
 import { SERVER } from "../settings.js"
-
+import { handleHttpErrors } from "../fetchUtils.js"
 const SERVER_URL = SERVER + "/api/quotes"
 
 export function page4Handlers() {
@@ -47,7 +47,7 @@ function editQuote() {
       }
       return res.json()
     })
-    .then(result => clearFields())
+    .then(() => clearFields())
     .catch(err => alert(err.message + " (NEVER USE ALERT FOR REAL)"))
 
 
