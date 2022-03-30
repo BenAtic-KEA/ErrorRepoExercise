@@ -1,5 +1,5 @@
 import { SERVER } from "../settings.js"
-import { handleHttpErrors } from "../fetchUtils.js";
+import { handleHttpErrors, makeOptions } from "../fetchUtils.js";
 const API_URL = SERVER + "/api/quotes"
 
 export function setUpAddButtonHandler() {
@@ -7,21 +7,15 @@ export function setUpAddButtonHandler() {
 }
 
 async function addNewQuote() {
-  try{
+  document.getElementById("error").innerHTML = ""
   const newQuote = {};
   newQuote.quote = document.getElementById("quote").value
   newQuote.ref = document.getElementById("author").value
-
-  fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Accept": "application/json",
-      "Content-type": "application/json"
-    },
-    body: JSON.stringify(newQuote)
-  })
+  try{
+  const addedQuote = await fetch(API_URL, makeOptions("Post",newQuote))
     .then(res => handleHttpErrors(res))
-    .then(addedQuote => document.getElementById("addedQuote").innerText = JSON.stringify(addedQuote))
+
+   document.getElementById("addedQuote").innerText = JSON.stringify(addedQuote)
   
 }catch (error){
   document.getElementById("error").innerHTML = error.message
